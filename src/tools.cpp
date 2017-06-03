@@ -46,19 +46,20 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
   
   float pow2_px_py = pow(px, 2) + pow(py, 2);
   float sqr_px_py = sqrt(pow2_px_py);
+  float pow2_px_py_15 = pow(pow2_px_py, 1.5);
   
   //check division by zero
-  if (sqr_px_py == 0 || pow2_px_py == 0 || pow(pow2_px_py, 1.5) == 0) {
+  if (fabs(sqr_px_py) < 0.0001 || fabs(pow2_px_py) < 0.0001 || fabs(pow2_px_py_15) < 0.0001) {
     cout << "Detected 0 division!" << endl;
     return Hj;
   }
   
   //compute the Jacobian matrix
   Hj << px / sqr_px_py, py / sqr_px_py, 0, 0,
-  -py / pow2_px_py, px / pow2_px_py, 0, 0,
-  (py * (vx * py - vy * px)) / pow(pow2_px_py, 1.5),
-  (px * (vy * px - vx * py)) / pow(pow2_px_py, 1.5),
-  px / sqr_px_py, py / sqr_px_py;
+        -py / pow2_px_py, px / pow2_px_py, 0, 0,
+        (py * (vx * py - vy * px)) / pow2_px_py_15,
+        (px * (vy * px - vx * py)) / pow2_px_py_15,
+        px / sqr_px_py, py / sqr_px_py;
   
   return Hj;
 }

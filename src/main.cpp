@@ -44,7 +44,6 @@ int main()
     // The 2 signifies a websocket event
     if (length && length > 2 && data[0] == '4' && data[1] == '2') {
       auto s = hasData(std::string(data));
-      std::cout << "onMessage: " << s << std::endl;
       if (s != "") {
         auto j = json::parse(s);
         std::string event = j[0].get<std::string>();
@@ -120,7 +119,11 @@ int main()
       	  estimations.push_back(estimate);
 
       	  VectorXd RMSE = tools.CalculateRMSE(estimations, ground_truth);
-
+          
+          if (RMSE(1) > 0.3) {
+            cout << "A" << endl;
+          }
+          
           json msgJson;
           msgJson["estimate_x"] = p_x;
           msgJson["estimate_y"] = p_y;
@@ -129,9 +132,7 @@ int main()
           msgJson["rmse_vx"] = RMSE(2);
           msgJson["rmse_vy"] = RMSE(3);
           auto msg = "42[\"estimate_marker\"," + msgJson.dump() + "]";
-           std::cout << msg << std::endl;
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
-          std::cout << "SENT" << std::endl;
         }
       } else {
         std::string msg = "42[\"manual\",{}]";
