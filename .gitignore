@@ -1,6 +1,9 @@
 # silly macOS
 .DS_Store
 
+ExtendedKF
+ExtendedKF.build/
+
 # build files
 build/
 
