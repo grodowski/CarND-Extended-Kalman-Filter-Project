@@ -1,4 +1,4 @@
-set(CMAKE_CXX_COMPILER "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++")
+set(CMAKE_CXX_COMPILER "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++")
 set(CMAKE_CXX_COMPILER_ARG1 "")
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 set(CMAKE_CXX_COMPILER_VERSION "8.1.0.8020042")
@@ -65,5 +65,5 @@ endif()
 
 
 set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "to_library;c++")
-set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/usr/lib")
-set(CMAKE_CXX_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks")
+set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "/usr/lib;/usr/local/lib")
+set(CMAKE_CXX_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "/Library/Frameworks;/System/Library/Frameworks")
