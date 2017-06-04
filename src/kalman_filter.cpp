@@ -41,12 +41,8 @@ void KalmanFilter::Update(const VectorXd &z) {
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
   VectorXd y = z - h_x_();
-  while (y(1) > M_PI) {
-    y(1) -= 2 * M_PI;
-  }
-  while (y(1) <- M_PI) {
-    y(1) += 2 * M_PI;
-  }
+
+  y(1) = constrainAngle(y(1));
   
   MatrixXd Ht = H_.transpose();
   MatrixXd S = H_ * P_ * Ht + R_;
@@ -65,13 +61,31 @@ VectorXd KalmanFilter::h_x_() {
   auto py = x_[1];
   auto vx = x_[2];
   auto vy = x_[3];
+
   if (fabs(px) < 0.001) {
+    cout << "Detected 0 division!" << endl;
     px = 0.001;
   }
+  
   double phi = atan2(py, px);
   double rho = sqrt(px * px + py * py);
+  
+  // TODO: factor out a by-reference helper
+  if (fabs(rho) < 0.001) {
+    cout << "Detected 0 division!" << endl;
+    rho = 0.001;
+  }
+  
   ret << rho,
          phi,
          (px * vx + py * vy) / rho;
   return ret;
+}
+
+double KalmanFilter::constrainAngle(double x) {
+  x = fmod(x + M_PI, 2 * M_PI);
+  if (x < 0) {
+    x += 2 * M_PI;
+  }
+  return x - M_PI;
 }

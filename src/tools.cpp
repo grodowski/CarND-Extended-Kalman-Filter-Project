@@ -44,22 +44,20 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
   float vx = x_state(2);
   float vy = x_state(3);
   
-  float pow2_px_py = pow(px, 2) + pow(py, 2);
-  float sqr_px_py = sqrt(pow2_px_py);
-  float pow2_px_py_15 = pow(pow2_px_py, 1.5);
+  float c1 = px * px + py * py;
+  float c2 = sqrt(c1);
+  float c3 = (c1 * c2);
   
   //check division by zero
-  if (fabs(sqr_px_py) < 0.0001 || fabs(pow2_px_py) < 0.0001 || fabs(pow2_px_py_15) < 0.0001) {
-    cout << "Detected 0 division!" << endl;
+  if(fabs(c1) < 0.001){
+    cout << "CalculateJacobian () - Error - Division by Zero" << endl;
     return Hj;
   }
   
   //compute the Jacobian matrix
-  Hj << px / sqr_px_py, py / sqr_px_py, 0, 0,
-        -py / pow2_px_py, px / pow2_px_py, 0, 0,
-        (py * (vx * py - vy * px)) / pow2_px_py_15,
-        (px * (vy * px - vx * py)) / pow2_px_py_15,
-        px / sqr_px_py, py / sqr_px_py;
+  Hj << (px/c2), (py/c2), 0, 0,
+        -(py/c1), (px/c1), 0, 0,
+        py*(vx*py - vy*px)/c3, px*(px*vy - py*vx)/c3, px/c2, py/c2;
   
   return Hj;
 }
